@@ -47,7 +47,7 @@ export async function requestOfferPick(input: {
         {
           role: "system",
           content:
-            "You choose one post-purchase offer. Pick exactly one variantId from the candidate list. Do not invent an id. Write a short headline and one sentence that mentions what the customer already bought.",
+            "You choose one post-purchase offer. Pick exactly one variantId from the candidate list. Do not invent an id. Write a short headline and one sentence that mentions what the customer already bought. Tone is enticing and persuasive.",
         },
         {
           role: "user",
