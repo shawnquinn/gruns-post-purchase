@@ -112,7 +112,11 @@ export async function decideOffer(shop: string, purchase: PurchaseSnapshot) {
     };
   }
 
-  const purchasedTitles = gate.lines.map((line) => line.title).filter(Boolean);
+  // Titles come from the catalog, not the request body: they go into the prompt, and the
+  // decision is cached for every buyer with the same products.
+  const purchasedTitles = productIds
+    .map((productId) => purchased.find((product) => product.productId === productId)?.title)
+    .filter((title): title is string => Boolean(title));
   const choice = await chooseOffer({
     candidates: selection.candidates,
     purchasedTitles,

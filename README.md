@@ -171,10 +171,10 @@ sequenceDiagram
 
 1. **Gate.** Skip orders under $0.50, which Shopify won't show an offer on anyway. A missing shipping address doesn't block the offer, because `ShouldRender` can run before the buyer enters one.
 2. **Filter.** Rules decide which products are allowed. Candidates must not already be in the order, must be available, and must cost at most 60% of the order subtotal. Complement rules narrow the list: `kids` → immunity, `sleep` → magnesium, `daily` → fiber, travel, or sleep. If nothing fits the price band, keep the cheapest complement and mark the band as relaxed.
-3. **Pick.** The model gets only the candidates (id, title, price, tags, one-line blurb) and the purchased titles. It returns strict JSON: `{ variantId, reason, headline, body }`. The app discards any `variantId` that isn't in the candidate list.
+3. **Pick.** The model gets only the candidates (id, title, price, tags, one-line blurb) and the purchased products' titles, both read from the local catalog. No text from the request body reaches the prompt, because the decision is cached for every buyer with the same products. It returns strict JSON: `{ variantId, reason, headline, body }`. The app discards any `variantId` that isn't in the candidate list.
 4. **Fallback.** On a timeout, an error, a missing key, or an invalid pick, choose the complement with the highest margin, or the cheapest candidate if no complement matched. Fixed copy names the purchased product.
 
-A $79 Daily Gummies order has three complements in the band (Fiber, Travel, Sleep), so the model makes a real choice. Cheaper single-product orders often narrow to one candidate, and then the model only writes the copy.
+A $79 Daily Gummies order has four complements in the band (Fiber, Travel, Sleep, and Magnesium Night, which is also tagged `sleep`), so the model makes a real choice. Cheaper single-product orders often narrow to one candidate, and then the model only writes the copy.
 
 ### Analytics
 
